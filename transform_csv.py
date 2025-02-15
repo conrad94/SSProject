@@ -51,12 +51,12 @@ def transform_data(df):
 data_dir = "CSV"
 all_data = pd.DataFrame()  # Empty DataFrame to hold all the merged data
 
-# Read and transform each CSV dynamically from the 'CSV' folder
+# Read and transform each CSV dynamically from the 'CSV' folder 
 for file_name in os.listdir(data_dir):
     if file_name.lower().endswith(".csv"):  # This will handle both .csv and .CSV extensions
         file_path = os.path.join(data_dir, file_name)
         df = pd.read_csv(file_path,skiprows=6, quotechar='"', skipfooter=3, engine="python")  # Read the CSV file
-        # df.columns = df.columns.str.strip()  # Remove extra spaces in column names
+        df = df.loc[:, ~df.columns.str.contains('^Unnamed')] # Take the extra column away, made because of extra comma at end if Row.
         transformed_df = transform_data(df)  # Apply transformations
         all_data = pd.concat([all_data, transformed_df], ignore_index=True)  # Append the data
 
